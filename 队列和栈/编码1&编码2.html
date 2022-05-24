@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      练习如何使用数组来实现队列，综合考虑使用数组的 push、pop、shift、unshift
+      操作
+    </title>
+  </head>
+  <body>
+    <!-- http://ife.baidu.com/%E8%B6%A3%E5%91%B3%E9%A1%B9%E7%9B%AE%E7%BB%83%E4%B9%A0/arrayQueue.html -->
+    <input id="queue-input" type="text" />
+    <p id="queue-cont">正向队列内容：</p>
+    <p id="reverse-queue-cont">反向队列内容：</p>
+    <button id="in-btn">入队</button>
+    <button id="out-btn">出队</button>
+    <button id="font-btn">打印队头元素内容</button>
+    <button id="empty-btn">判断队列是否为空</button>
+
+    <script>
+      // 队列先进先出
+
+      // 队列对象
+      class Queue {
+        qQueue = [];
+        rQueue = [];
+        // 入队
+        enqueue(value) {
+          this.qQueue.unshift(value);
+        }
+        // 出队
+        dequeue() {
+          return this.qQueue.pop();
+        }
+        // 获取队头
+        getQueueHead() {
+          return this.qQueue[this.qQueue.length - 1];
+        }
+        // 判空
+        isEmpty() {
+          return this.qQueue.length > 0 ? false : true;
+        }
+        // 输出字符串
+        toString() {
+          return this.qQueue.join("->");
+        }
+        // 反向输出
+        rToString() {
+          this.rQueue = JSON.parse(JSON.stringify(this.qQueue));
+          return this.rQueue.reverse().join("<-");
+        }
+      }
+
+      let aQueue = new Queue();
+      let queueInput = document.querySelector("#queue-input");
+      let queueCont = document.querySelector("#queue-cont");
+      let rQueueCont = document.querySelector("#reverse-queue-cont");
+      let inBtn = document.querySelector("#in-btn");
+      let outBtn = document.querySelector("#out-btn");
+      let fontBtn = document.querySelector("#font-btn");
+      let emptyBtn = document.querySelector("#empty-btn");
+
+      inBtn.addEventListener("click", (e) => {
+        if (queueInput.value) aQueue.enqueue(queueInput.value);
+        queueCont.innerText = "正向队列内容：" + aQueue.toString();
+        rQueueCont.innerText = "反向队列内容：" + aQueue.rToString();
+        queueInput.value = "";
+      });
+
+      outBtn.addEventListener("click", (e) => {
+        if (!aQueue.isEmpty()) aQueue.dequeue();
+        queueCont.innerText = "正向队列内容：" + aQueue.toString();
+        rQueueCont.innerText = "反向队列内容：" + aQueue.rToString();
+      });
+
+      fontBtn.addEventListener("click", (e) => {
+        if (!aQueue.isEmpty())
+          queueCont.innerText = "队列头部内容：" + aQueue.getQueueHead();
+      });
+
+      emptyBtn.addEventListener("click", (e) => {
+        console.log(aQueue.isEmpty() ? "空" : "不空");
+        queueCont.innerText = "判断队列是否为空：" + (aQueue.isEmpty() ? "空" : "不空");
+      });
+    </script>
+  </body>
+</html>

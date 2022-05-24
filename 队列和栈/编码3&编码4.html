@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      练习如何使用数组来实现栈，综合考虑使用数组的 push、pop、shift、unshift
+      操作
+    </title>
+  </head>
+  <body>
+    <input id="stack-input" type="text" />
+    <p id="stack-cont">栈内容：</p>
+    <p id="r-stack-cont">栈内容：</p>
+    <button id="push-btn">进栈</button>
+    <button id="pop-btn">退栈</button>
+    <button id="font-btn">打印栈顶元素内容</button>
+    <button id="empty-btn">判断栈是否为空</button>
+
+    <script>
+      class Stack {
+        qStack = [];
+        rStack = [];
+        // 入栈
+        push(value) {
+          this.qStack.unshift(value);
+        }
+        // 出栈
+        pop() {
+          return this.qStack.shift();
+        }
+        // 获取栈顶
+        getStackHead() {
+          return this.qStack[0];
+        }
+        // 判空
+        isEmpty() {
+          return this.qStack.length > 0 ? false : true;
+        }
+        // 输出字符串
+        toString() {
+          return this.qStack.join("->");
+        }
+        // 反向输出
+        rToString() {
+          this.rStack = JSON.parse(JSON.stringify(this.qStack));
+          return this.rStack.reverse().join("<-");
+        }
+      }
+
+      let aStack = new Stack();
+      let stackInput = document.querySelector("#stack-input");
+      let stackCont = document.querySelector("#stack-cont");
+      let rStackCont = document.querySelector("#r-stack-cont");
+      let pushBtn = document.querySelector("#push-btn");
+      let popBtn = document.querySelector("#pop-btn");
+      let fontBtn = document.querySelector("#font-btn");
+      let emptyBtn = document.querySelector("#empty-btn");
+
+      pushBtn.addEventListener("click", (e) => {
+        if (stackInput.value) aStack.push(stackInput.value);
+        stackCont.innerText = "正向栈内容：" + aStack.toString();
+        rStackCont.innerText = "反向栈内容：" + aStack.rToString();
+        stackInput.value = "";
+      });
+
+      popBtn.addEventListener("click", (e) => {
+        if (!aStack.isEmpty()) aStack.pop();
+        stackCont.innerText = "正向栈内容：" + aStack.toString();
+        rStackCont.innerText = "反向栈内容：" + aStack.rToString();
+      });
+
+      fontBtn.addEventListener("click", (e) => {
+        if (!aStack.isEmpty())
+          stackCont.innerText = "栈头部内容：" + aStack.getStackHead();
+      });
+
+      emptyBtn.addEventListener("click", (e) => {
+        console.log(aStack.isEmpty() ? "空" : "不空");
+        stackCont.innerText =
+          "判断栈是否为空：" + (aStack.isEmpty() ? "空" : "不空");
+      });
+    </script>
+  </body>
+</html>
