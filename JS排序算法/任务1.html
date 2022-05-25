@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="random">随机生成15个数的数组</button>
+    <button id="bubble">使用冒泡排序</button>
+    <button id="selection">使用选择排序法</button>
+    <button id="insert">使用插入排序法</button>
+    <button id="quick">快速排序法</button>
+    <p id="showArray"></p>
+    <p id="showSortProcess"></p>
+    <script>
+      // 点击随机生成15个数的数组按钮生成一个随机数组,展示在 id 为 showArray 的 p 标签中
+      // 分别用四种排序算法，实现对随机数组从小到大进行排序
+      // 排序过程在 id 为 showSortProcess 的 p 标签中输出
+      function generationRandom(start, end, quantity) {
+        let arr = [];
+        for (let i = 0; i < quantity; i++) {
+          arr[i] = parseInt(Math.random() * (end - start) + start);
+        }
+        return JSON.parse(JSON.stringify(arr));
+      }
+
+      Array.prototype.bubbleSort = function () {
+        //实现冒泡排序
+        let arr = JSON.parse(JSON.stringify(this));
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = 0; j < arr.length - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+              // console.log(this[j], this[j + 1]);
+              let temp = arr[j];
+              arr[j] = arr[j + 1];
+              arr[j + 1] = temp;
+            }
+          }
+        }
+        return arr;
+      };
+
+      Array.prototype.selectionSort = function () {
+        //实现选择排序法
+        let arr = JSON.parse(JSON.stringify(this));
+        for (let i = 0; i < arr.length - 1; i++) {
+          let minIndex = i;
+          for (let j = i + 1; j < arr.length; j++) {
+            if (arr[j] < arr[minIndex]) {
+              minIndex = j;
+            }
+          }
+          let temp = arr[minIndex];
+          arr[minIndex] = arr[i];
+          arr[i] = temp;
+        }
+        return arr;
+      };
+
+      Array.prototype.insertionSort = function () {
+        //实现插入排序法
+        let arr = JSON.parse(JSON.stringify(this));
+        for (let i = 1; i < arr.length; i++) {
+          for (let j = i - 1; j > 0; j--) {
+            if (arr[j] < arr[j - 1]) {
+              let temp = arr[j];
+              arr[j] = arr[j - 1];
+              arr[j - 1] = temp;
+            } else {
+              break;
+            }
+          }
+        }
+        return arr;
+      };
+
+      function quickSort(arr, left, right) {
+        //实现快速排序法
+        var len = arr.length,
+          partitionIndex,
+          left = typeof left != "number" ? 0 : left,
+          right = typeof right != "number" ? len - 1 : right;
+
+        if (left < right) {
+          partitionIndex = partition(arr, left, right);
+          quickSort(arr, left, partitionIndex - 1);
+          quickSort(arr, partitionIndex + 1, right);
+        }
+        return arr;
+      }
+
+      function partition(arr, left, right) {
+        var pivot = left,
+          index = pivot + 1;
+        for (var i = index; i <= right; i++) {
+          if (arr[i] < arr[pivot]) {
+            swap(arr, i, index);
+            index++;
+          }
+        }
+        swap(arr, pivot, index - 1);
+        return index - 1;
+      }
+
+      function swap(arr, i, j) {
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+
+      let showArray = document.querySelector("#showArray");
+      let showSortProcess = document.querySelector("#showSortProcess");
+      let random = document.querySelector("#random");
+      let bubble = document.querySelector("#bubble");
+      let selection = document.querySelector("#selection");
+      let insert = document.querySelector("#insert");
+      let quick = document.querySelector("#quick");
+
+      let randomArr = [];
+      random.addEventListener("click", (e) => {
+        randomArr = generationRandom(1, 100, 15);
+        showArray.innerHTML = randomArr.join(",");
+      });
+
+      bubble.addEventListener("click", (e) => {
+        if (randomArr.length <= 0) return;
+        showSortProcess.innerHTML = randomArr.bubbleSort().join(",");
+      });
+
+      selection.addEventListener("click", (e) => {
+        if (randomArr.length <= 0) return;
+        showSortProcess.innerHTML = randomArr.selectionSort().join(",");
+      });
+
+      insert.addEventListener("click", (e) => {
+        if (randomArr.length <= 0) return;
+        showSortProcess.innerHTML = randomArr.insertionSort().join(",");
+      });
+
+      quick.addEventListener("click", (e) => {
+        if (randomArr.length <= 0) return;
+        showSortProcess.innerHTML = quickSort(randomArr, 0 , randomArr.length - 1).join(",");
+      });
+    </script>
+  </body>
+</html>
